@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Reel
+  - Symbol
+  - Lever
+  - Payline
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  m_SortingLayers:
+  - entry: 0
+    name: Default
+    uniqueID: 0
+  - entry: 1
+    name: Background
+    uniqueID: 1001
+  - entry: 2
+    name: MachineBase
+    uniqueID: 1002
+  - entry: 3
+    name: Reels
+    uniqueID: 1003
+  - entry: 4
+    name: MachineOverlay
+    uniqueID: 1004
+  - entry: 5
+    name: UI
+    uniqueID: 1005
+  - entry: 6
+    name: Popup
+    uniqueID: 1006
