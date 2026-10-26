@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Slot Machine - WebGL Build</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Canvas for Reel Rendering & Machine Base -->
+        <canvas id="slot-canvas"></canvas>
+
+        <!-- Confetti Particle Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+
+        <!-- UI Overlay Layer -->
+        <div id="ui-layer">
+            <!-- Top Navigation Bar -->
+            <div class="top-bar">
+                <div class="brand-title">UNDERPIN CASINO SLOTS</div>
+                <div class="header-buttons">
+                    <button id="btn-sound" class="header-btn">SOUND ON</button>
+                    <button id="btn-paytable" class="header-btn">PAYTABLE</button>
+                    <button id="btn-fullscreen" class="header-btn">FULLSCREEN</button>
+                </div>
+            </div>
+
+            <!-- Free Spins Banner -->
+            <div id="free-spins-banner">FREE SPINS ACTIVE (2x MULTIPLIER)</div>
+
+            <!-- Near-Miss Anticipation Banner -->
+            <div id="anticipation-banner">JACKPOT CHANCE! ANTICIPATION SPIN...</div>
+
+            <!-- Interactive Mechanical Lever Hitbox -->
+            <div id="lever-hitbox" title="Click or Drag Down to Spin! (Or press Spacebar)"></div>
+
+            <!-- Status Message Bar -->
+            <div id="status-message">Welcome to Classic Slot Machine!</div>
+
+            <!-- Bottom Control Deck -->
+            <div class="control-deck">
+                <!-- Display Windows -->
+                <div class="display-group">
+                    <div class="display-box">
+                        <div class="display-label">BALANCE</div>
+                        <div id="display-balance" class="display-value">1,000</div>
+                    </div>
+                    <div class="display-box">
+                        <div class="display-label">CURRENT BET</div>
+                        <div id="display-bet" class="display-value">10</div>
+                    </div>
+                    <div class="display-box">
+                        <div class="display-label">WIN</div>
+                        <div id="display-win" class="display-value">0</div>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="buttons-group">
+                    <button id="btn-bet-minus" class="btn-ctrl btn-small" title="Decrease Bet">-</button>
+                    <button id="btn-bet-plus" class="btn-ctrl btn-small" title="Increase Bet">+</button>
+                    <button id="btn-max-bet" class="btn-ctrl" title="Set Bet to 100">MAX BET</button>
+                    <button id="btn-auto-spin" class="btn-ctrl" title="Run 10 Automatic Spins">AUTO SPIN</button>
+                    <button id="btn-spin" title="Spin the Reels (Spacebar)">SPIN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paytable Modal -->
+        <div id="paytable-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">PAYOUT TABLE & GAME RULES</h3>
+                    <button id="close-paytable" class="modal-close">&times;</button>
+                </div>
+                <div class="paytable-grid">
+                    <div class="pay-card">
+                        <img src="assets/sprites/symbol_wild.png" alt="Wild">
+                        <div class="pay-details">
+                            <h4>3x WILD</h4>
+                            <p>Super Jackpot: <strong>150x Bet</strong> + 10 Free Spins! (Substitutes for any symbol)</p>
+                        </div>
+                    </div>
+                    <div class="pay-card">
+                        <img src="assets/sprites/symbol_7.png" alt="Seven">
+                        <div class="pay-details">
+                            <h4>3x LUCKY SEVEN</h4>
+                            <p>Mega Jackpot: <strong>100x Bet</strong></p>
+                        </div>
+                    </div>
+                    <div class="pay-card">
+                        <img src="assets/sprites/symbol_cherry.png" alt="Cherry">
+                        <div class="pay-details">
+                            <h4>3x CHERRIES</h4>
+                            <p>High Payout: <strong>40x Bet</strong></p>
+                        </div>
+                    </div>
+                    <div class="pay-card">
+                        <img src="assets/sprites/symbol_bell.png" alt="Bell">
+                        <div class="pay-details">
+                            <h4>3x BELLS</h4>
+                            <p>Medium Payout: <strong>25x Bet</strong></p>
+                        </div>
+                    </div>
+                    <div class="pay-card">
+                        <img src="assets/sprites/symbol_bar.png" alt="Bar">
+                        <div class="pay-details">
+                            <h4>3x BAR</h4>
+                            <p>Standard Payout: <strong>15x Bet</strong></p>
+                        </div>
+                    </div>
+                    <div class="pay-card">
+                        <div style="font-size: 32px; font-weight: 900; color: #ffd700; width: 48px; text-align: center;">2x</div>
+                        <div class="pay-details">
+                            <h4>ANY 2 MATCHING</h4>
+                            <p>Partial Match: <strong>2x Bet</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="paytable-footer">
+                    <strong>Bonus Features:</strong><br>
+                    &bull; <strong>Wild Card:</strong> Wild symbols substitute for any standard symbol to form winning combinations.<br>
+                    &bull; <strong>Free Spins:</strong> 3 Wilds trigger 10 Free Spins (2 Wilds trigger 5 Free Spins) with an automatic <strong>2x Multiplier</strong> on all wins! Free spins do not deduct credits.<br>
+                    &bull; <strong>Mechanical Lever:</strong> Drag down or click the lever to pull, or press <strong>Spacebar</strong>.
+                </div>
+            </div>
+        </div>
+
+        <!-- Big Win / Jackpot Celebration Modal (using popup.png & banner_claim.png) -->
+        <div id="win-popup-modal">
+            <div class="win-popup-box" style="background-image: url('assets/sprites/popup.png');">
+                <div id="popup-title" class="win-title">MEGA JACKPOT!</div>
+                <div id="popup-amount" class="win-amount">+1,000</div>
+                <div id="popup-desc" class="win-desc">3x LUCKY SEVENS!</div>
+                <button id="btn-claim-win" class="win-claim-btn" style="background-image: url('assets/sprites/banner_claim.png');">
+                    CLAIM WIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script imports -->
+    <script src="js/audio.js"></script>
+    <script src="js/rng.js"></script>
+    <script src="js/reel.js"></script>
+    <script src="js/payout.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
